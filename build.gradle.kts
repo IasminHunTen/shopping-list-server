@@ -14,15 +14,23 @@ plugins {
 group = "com.example"
 version = "0.0.1"
 
-tasks {
-    create("stage").dependsOn("installDist")
-}
+
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+}
+
+tasks.jar {
+    manifest.attributes["Main-Class"] = "com.example.ApplicationKt"
+    val dependencies = configurations
+        .runtimeClasspath
+        .get()
+        .map(::zipTree)
+    from(dependencies)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 repositories {
