@@ -17,7 +17,7 @@ fun Application.configureRouting() {
         get("/dummy/{flag?}"){
             val flag = call.parameters["flag"]?.toIntOrNull() ?: 0
             if(flag == 0)
-                call.respond(Dummies.Bad("an error message"))
+                call.respond(status = HttpStatusCode.BadRequest, Dummies.Bad("an error message"))
             else
                 call.respond(Dummies.Good(10))
 
