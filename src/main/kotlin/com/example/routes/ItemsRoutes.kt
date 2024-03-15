@@ -16,12 +16,7 @@ fun Route.itemsRoutes() {
 
         get("{id?}") {
             val id = call.parameters["id"]?.toInt() ?: throw InvalidInputException("Missing id from path")
-            with(itemsDao.getShoppingListItems(id)){
-                if(isNotEmpty())
-                    call.respond(this)
-                else
-                    call.respondText("No items to be shown", status = HttpStatusCode.OK)
-            }
+            call.respond(status = HttpStatusCode.OK, itemsDao.getShoppingListItems(id))
         }
 
         post {

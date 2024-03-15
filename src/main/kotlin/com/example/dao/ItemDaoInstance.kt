@@ -1,6 +1,8 @@
 package com.example.dao
 
 import com.example.dao.DatabaseSingleton.dbQuery
+import com.example.exceptions.InvalidInputException
+import com.example.exceptions.ResourceNotFoundException
 import com.example.models.Item
 import com.example.models.Items
 import com.example.models.ShoppingLists
@@ -9,6 +11,11 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 class ItemDaoInstance : ItemDao {
     override suspend fun getShoppingListItems(shoppingListId: Int): List<Item> = dbQuery {
+        ShoppingLists.select { ShoppingLists.id eq shoppingListId }.singleOrNull().let{
+            if (it == null){
+                throw ResourceNotFoundException("There is no shopping list with id: $shoppingListId")
+            }
+        }
         Items.select { Items.shoppingListId eq shoppingListId }.map(::resultRowToItem)
     }
 

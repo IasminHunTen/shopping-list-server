@@ -15,12 +15,7 @@ fun Route.shoppingListRoutes() {
     route(RoutesPaths.SHOPPING_LIST.path) {
 
         get {
-            with(shoppingListDao.all()){
-                if(isNotEmpty())
-                    call.respond(this)
-                else
-                    call.respondText("No shopping list to be shown", status = HttpStatusCode.OK)
-            }
+            call.respond(status = HttpStatusCode.OK, shoppingListDao.all())
         }
 
         post {
