@@ -1,7 +1,6 @@
 package com.example.dao
 
 import com.example.dao.DatabaseSingleton.dbQuery
-import com.example.exceptions.InvalidInputException
 import com.example.exceptions.ResourceNotFoundException
 import com.example.models.Item
 import com.example.models.Items
