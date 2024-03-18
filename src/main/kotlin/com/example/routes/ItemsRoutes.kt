@@ -4,6 +4,7 @@ import com.example.dao.itemsDao
 import com.example.exceptions.InvalidInputException
 import com.example.exceptions.ResourceNotFoundException
 import com.example.models.Item
+import com.example.models.TextResponse
 import com.example.models.validateInput
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -29,7 +30,7 @@ fun Route.itemsRoutes() {
             val input = call.receive<Item>()
             input.validateInput()
             if(itemsDao.updateItem(input))
-                call.respondText("", status = HttpStatusCode.NoContent)
+                call.respond(status = HttpStatusCode.NoContent, message = TextResponse())
             else
                 throw ResourceNotFoundException("No item with '${input.name}' name, has been found")
         }
@@ -37,7 +38,7 @@ fun Route.itemsRoutes() {
         delete("{id?}") {
             val id = call.parameters["id"]?.toInt() ?: throw InvalidInputException("Missing id from path")
             if(itemsDao.deleteItem(id))
-                call.respondText("item removed", status= HttpStatusCode.Accepted)
+                call.respond(status = HttpStatusCode.Accepted, message = TextResponse("item removed"))
             else
                 throw ResourceNotFoundException("No item with id($id), has been found")
         }
@@ -45,7 +46,7 @@ fun Route.itemsRoutes() {
         put("state") {
             val input = call.receive<Item>()
             if (itemsDao.updateItemState(input))
-                call.respondText("", status = HttpStatusCode.NoContent)
+                call.respond(status = HttpStatusCode.NoContent, message = TextResponse())
             else
                 throw ResourceNotFoundException("No item with '${input.name}' name, has been found")
         }

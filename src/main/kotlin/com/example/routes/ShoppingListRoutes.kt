@@ -4,6 +4,7 @@ import com.example.dao.shoppingListDao
 import com.example.exceptions.InvalidInputException
 import com.example.exceptions.ResourceNotFoundException
 import com.example.models.ShoppingList
+import com.example.models.TextResponse
 import com.example.models.validateInput
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -27,7 +28,7 @@ fun Route.shoppingListRoutes() {
         delete("{id?}") {
             val id = call.parameters["id"]?.toInt() ?: throw InvalidInputException("Missing id from path")
             if(shoppingListDao.deleteShoppingList(id))
-                call.respondText("shopping list removed", status = HttpStatusCode.Accepted)
+                call.respond(status = HttpStatusCode.Accepted, message = TextResponse("shopping list removed"))
             else
                 throw ResourceNotFoundException("No shopping list with id($id), has been found")
         }

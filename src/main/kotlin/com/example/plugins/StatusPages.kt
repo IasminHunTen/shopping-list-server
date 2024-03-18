@@ -3,6 +3,7 @@ package com.example.plugins
 import com.example.exceptions.ConflictException
 import com.example.exceptions.InvalidInputException
 import com.example.exceptions.ResourceNotFoundException
+import com.example.models.TextResponse
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.*
@@ -16,7 +17,7 @@ fun Application.configureStatusPages(){
                 is InvalidInputException -> call.respond(status = HttpStatusCode.BadRequest, message = cause.body)
                 is ResourceNotFoundException -> call.respond(status = HttpStatusCode.NotFound, message = cause.body)
                 is ExposedSQLException -> call.respond(status = HttpStatusCode.Conflict, message = ConflictException(call, cause).body)
-                else -> call.respondText(text = "500: ${cause.message}", status = HttpStatusCode.InternalServerError)
+                else -> call.respond(status = HttpStatusCode.InternalServerError, message = TextResponse(cause.message.toString()))
             }
         }
     }

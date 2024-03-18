@@ -13,14 +13,6 @@ fun Application.configureRouting() {
         get("/") {
             call.respond("Welcome to shopping list rest API")
         }
-        get("/dummy/{flag?}"){
-            val flag = call.parameters["flag"]?.toIntOrNull() ?: 0
-            if(flag == 0)
-                call.respond(status = HttpStatusCode.BadRequest, Dummies.Bad("an error message"))
-            else
-                call.respond(Dummies.Good(10))
-
-        }
         shoppingListRoutes()
         itemsRoutes()
     }
